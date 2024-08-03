@@ -10,7 +10,20 @@ import {
 import { AppService } from './app.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role, UserModel } from './entity/user.entity';
-import { Repository } from 'typeorm';
+import {
+  Between,
+  Equal,
+  ILike,
+  In,
+  IsNull,
+  LessThan,
+  LessThanOrEqual,
+  Like,
+  MoreThan,
+  MoreThanOrEqual,
+  Not,
+  Repository,
+} from 'typeorm';
 import { ProfileModel } from './entity/profile.entity';
 import { PostModel } from './entity/post.entity';
 import { TagModel } from './entity/tag.entity';
@@ -32,18 +45,48 @@ export class AppController {
   ) {}
 
   @Post('users')
-  postUser() {
-    return this.userRepository.save({
-      email: '1234@gmail.com',
-      // title: 'test title',
-      // role: Role.ADMIN,
-      // role: 'another role',
-    });
+  async postUser() {
+    // return this.userRepository.save({
+    //   // email: '1234@gmail.com',
+    //   // title: 'test title',
+    //   // role: Role.ADMIN,
+    //   // role: 'another role',
+    // });
+    for (let i = 0; i < 100; i++) {
+      await this.userRepository.save({
+        email: `user-${i}@gmail.com`,
+      });
+    }
   }
 
   @Get('users')
   getUsers() {
     return this.userRepository.find({
+      where: {
+        // 아닌경우 가져오기
+        // id: Not(1),
+        // 적은경우 가져오기
+        // id: LessThan(30),
+        // 적은경우 or 같은경우
+        // id: LessThanOrEqual(30),
+        // 많은경우
+        // id: MoreThan(30),
+        // 많은경우 or 같은경우
+        // id: MoreThanOrEqual(30),
+        // 같은경우
+        // id: Equal(30),
+        // 유사값
+        // email: Like('%GMAIL%'),
+        // 대문자 소문자 구분안하는 유사값
+        // email: ILike('%GMAIL%'),
+        // 사이값
+        // id: Between(10, 15),
+        // 해당되는 여러개의 값
+        // id: In([1, 3, 5, 7, 99]),
+        // null인 경우 가져오기
+        // id: IsNull(),
+      },
+
       // 엔티티 컬럼 옵션에서 eager를 true로 하면 relations 설정을 안해도 자동으로 가져옴
       // relations: {
       //   profile: true,
@@ -53,16 +96,15 @@ export class AppController {
       // 기본은 모든 프로퍼티를 가져온다
       // 만약에 select를 정의하지 않으면
       // select를 정의함녀 정의된 프로퍼티들만 가져오게된다.
-      select: {
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        version: true,
-        profile: {
-          id: true,
-        },
-      },
-
+      // select: {
+      //   id: true,
+      //   createdAt: true,
+      //   updatedAt: true,
+      //   version: true,
+      //   profile: {
+      //     id: true,
+      //   },
+      // },
       //필터링할 조건을 입력하게된다.
       // AND 조건
       // where: {
@@ -77,24 +119,20 @@ export class AppController {
       //     id: 3,
       //   },
       // },
-
       // 관계를 가져오는법
-      relations: {
-        profile: true,
-      },
-
+      // relations: {
+      //   profile: true,
+      // },
       // 오름차, 내림차
       // ASC -> 오름차
       // DESC -> 내림차
-      order: {
-        id: 'DESC',
-      },
-
+      // order: {
+      //   id: 'DESC',
+      // },
       // 처음 몇개를 제외할지
-      skip: 0,
-
+      // skip: 0,
       // 몇개를 가져올지
-      take: 2,
+      // take: 2,
     });
   }
 
