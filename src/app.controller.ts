@@ -1,4 +1,12 @@
-import { Controller, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role, UserModel } from './entity/user.entity';
@@ -42,10 +50,11 @@ export class AppController {
       //   },
       // }
       {
-        relations: {
-          profile: true,
-          posts: true,
-        },
+        // 엔티티 컬럼 옵션에서 eager를 true로 하면 relations 설정을 안해도 자동으로 가져옴
+        // relations: {
+        //   profile: true,
+        //   posts: true,
+        // },
       },
     );
   }
@@ -63,16 +72,24 @@ export class AppController {
     });
   }
 
+  @Delete('user/profile/:id')
+  async deleteProfile(@Param('id') id: string) {
+    await this.profileRepository.delete(+id);
+  }
+
   @Post('user/profile')
   async createUserAndProfile() {
     const user = await this.userRepository.save({
       email: 'asdf@codefactory.ai',
+      profile: {
+        profileImg: 'asdf.jpg',
+      },
     });
 
-    const profile = await this.profileRepository.save({
-      profileImg: 'asdf.jpg',
-      user,
-    });
+    // const profile = await this.profileRepository.save({
+    //   profileImg: 'asdf.jpg',
+    //   user,
+    // });
 
     return user;
   }
