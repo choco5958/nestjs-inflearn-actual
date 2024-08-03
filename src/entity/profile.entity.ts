@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserModel } from './user.entity';
@@ -12,8 +12,7 @@ export class ProfileModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => UserModel, (user) => user.profile)
-  @JoinColumn()
+  @OneToOne(() => UserModel, (user) => user.profile)
   user: UserModel;
 
   @Column()

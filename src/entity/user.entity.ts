@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  JoinColumn,
   OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
@@ -83,12 +84,12 @@ export class UserModel {
   // 데이터 생성 일자
   // 데이터가 생성되는 날짜와 시간이 자동으로 찍힌다.
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   // 데이터 업데이트 일자
   // 데이터가 업데이트되는 날짜와 시간이 자동으로 찍힌다.
   @UpdateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
 
   // 데이터가 업데이트 될때마다 1씩 올라간다.
   // 처음 생성되면 값은 1이다.
@@ -101,5 +102,6 @@ export class UserModel {
   additinalId: string;
 
   @OneToOne(() => ProfileModel, (profile) => profile.user)
+  @JoinColumn()
   profile: ProfileModel;
 }

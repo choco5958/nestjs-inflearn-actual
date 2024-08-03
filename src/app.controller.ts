@@ -26,15 +26,19 @@ export class AppController {
 
   @Get('users')
   getUsers() {
-    return this.userRepository
-      .find
+    return this.userRepository.find(
       // {
       //   select: {
       //     id: true,
       //     title: true,
       //   },
       // }
-      ();
+      {
+        relations: {
+          profile: true,
+        },
+      },
+    );
   }
 
   @Patch('users/:id')
@@ -60,5 +64,7 @@ export class AppController {
       profileImg: 'asdf.jpg',
       user,
     });
+
+    return user;
   }
 }
